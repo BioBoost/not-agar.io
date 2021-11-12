@@ -1,5 +1,6 @@
 import Phaser from 'phaser';
 import { Blob } from './lib/blob'
+import config from './config/config'
 
 let player1 = {
   origin: { x: 0, y: 0 },
@@ -71,23 +72,4 @@ class MyGame extends Phaser.Scene
     }
 }
 
-const config = {
-    type: Phaser.AUTO,
-    parent: 'phaser-example',
-
-    // Size of the canvas (size the game will render on)
-    // World itself is actually infinite
-    width: 96,
-    height: 64,
-
-    backgroundColor: '#333333',
-    pixelArt: true,
-    antialias: false,
-    scale: {
-      mode: Phaser.Scale.FIT,
-      autoCenter: Phaser.Scale.CENTER_BOTH,
-    },
-    scene: MyGame
-};
-
-const game = new Phaser.Game(config);
+const game = new Phaser.Game(Object.assign({scene: MyGame }, config.phaser));
