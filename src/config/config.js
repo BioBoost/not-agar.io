@@ -32,6 +32,13 @@ const config = {
     X_MAX: 96/2-1,
     Y_MIN: 0,
     Y_MAX: 64/2-1,
+  },
+
+  backend: {
+    host: 'http://localhost:3000',
+    routes: {
+      display: '/display'
+    }
   }
 
 }

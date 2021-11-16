@@ -2,6 +2,7 @@ import Phaser from 'phaser';
 import { Blob } from './lib/blob'
 import config from './config/config'
 import { Player } from './lib/player'
+import axios from 'axios'
 
 let player1 = new Player({
   color: 0xff0000,
@@ -63,10 +64,11 @@ class MyGame extends Phaser.Scene {
       this.player2Blobs.add(circle);
       playfield2.add(circle);     // Add to the player's field
     });
-
+    
+    this.snapshotCounter = 0;
   }
 
-  update() {
+  update(t, tt) {
     let cursors = this.input.keyboard.createCursorKeys();
 
     let dx = 0;
@@ -79,6 +81,29 @@ class MyGame extends Phaser.Scene {
 
     this._update_player_blobs(this.player1Blobs);
     this._update_player_blobs(this.player2Blobs);
+
+    // TODO - Not sure if this is best approach
+    // Schedule snapshot which we can send to the display
+    if (++this.snapshotCounter == 10) {
+      console.log("Rendering on 99 bugs display")
+      this.game.renderer.snapshot((image) => {
+        // Posting to backend because CORs is being pain in the ass with hyper (rust api).
+        // Image is html img element with src set to base64 image data.
+        // We do need to strip off the part that contains 'data:image/png;base64,`
+
+        axios.post(`${config.backend.host}${config.backend.routes.display}`, {
+          data: image.src.substring(22)
+        })
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      }, 'image/png');
+
+      this.updateCounter = 0
+    }
   }
 
   // Update the graphical representation of the blobs
