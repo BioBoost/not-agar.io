@@ -26,3 +26,10 @@ After you run the `npm run build` command, your code will be built into a single
 ## Webpack Template
 
 Started project from [Webpack template](https://github.com/photonstorm/phaser3-project-template).
+
+## Related Repositories
+
+* [Not-Agar.io Backend](https://github.com/BioBoost/not-agar.io-backend) which contains the API project that allows control of this game and allows the Phaser game to render to the display.
+* [99-Bugs led display API](https://github.com/BioBoost/99bugs-led-display-api) which contains the LED display API (in rust)
+* [Rust Driver 99 Bugs Display](https://github.com/BioBoost/99bugs-led-display-driver) which contains the SPI driver for the Raspberry Pi that communicates with the Mojo FPGA
+* [Mojo RGB Led Panel Control](https://github.com/BioBoost/mojo_rgb_led_panel_vhdl) the VHDL project that models the FPGA to drive the LED displays and can be controlled via SPI.

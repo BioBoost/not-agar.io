@@ -68,7 +68,7 @@ class MyGame extends Phaser.Scene {
     this.snapshotCounter = 0;
   }
 
-  update(t, tt) {
+  update() {
     let cursors = this.input.keyboard.createCursorKeys();
 
     let dx = 0;
