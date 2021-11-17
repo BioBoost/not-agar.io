@@ -6,6 +6,20 @@ Can be connected to the 99bugs LED Tv.
 
 Requires external controllers such as the BLE Touch Berry Controllers or command line application.
 
+## Getting Started
+
+Install the dependencies:
+
+```bash
+npm install
+```
+
+Start the development app:
+
+```bash
+npm start
+```
+
 ## Available Commands
 
 | Command | Description |
