@@ -34,8 +34,13 @@ const config = {
     Y_MAX: 64/2-1,
   },
 
+  game: {
+    round_time: 10
+  },
+
   backend: {
     host: 'http://localhost:3000',
+    enable_display: false,
     routes: {
       display: '/display'
     }

@@ -15,7 +15,36 @@ const BlobHelper = {
     stable.heal(target.hp);
     stable.set_location(stable.location.x, stable.location.y) // Move to validate location
     target.kill();
-  }
+  },
+
+  is_within_blob(blob, location) {
+    const distance = Phaser.Math.Distance.Between(
+      blob.location.x,
+      blob.location.y,
+      location.x,
+      location.y
+    ).toFixed(0);
+
+    return (distance < blob.radius());
+  },
+
+  is_within_range_of_blob(blob, location, range) {
+    const distance = Phaser.Math.Distance.Between(
+      blob.location.x,
+      blob.location.y,
+      location.x,
+      location.y
+    ).toFixed(0);
+
+    return (distance <= range);
+  },
+
+  blobs_within_range(blobs, location, range) {
+    return blobs.filter((b) => 
+      this.is_within_range_of_blob(b, location, range)
+    );
+  },
+
 }
 
 export { BlobHelper };
