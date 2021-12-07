@@ -27,15 +27,7 @@ class Player {
   }
 
   shoot(sourceBlob, targetPlayer, targetLocation) {
-    console.log("Checking for blobs in range of ");
-    console.log(targetLocation)
-    console.log("Radius: " + sourceBlob.radius())
-    console.log("Looking at following blobs:")
-    console.log(targetPlayer.blobs)
     let targetBlobs = BlobHelper.blobs_within_range(targetPlayer.blobs, targetLocation, sourceBlob.radius());
-
-    console.log("Found following blobs in range:")
-    console.log(targetBlobs)
 
     // TODO Now damage the blobs that were in range !
     // TODO: https://mathworld.wolfram.com/Circle-CircleIntersection.html
@@ -55,10 +47,10 @@ class Player {
 
   _setup_blobs() {
     this.blobs = [
-      new Blob('red', { location: { x: 3, y: 3 }, color: 0xff0000 }),
-      new Blob('green', { location: { x: 15, y: 8 }, color: 0x00ff00 }),
-      new Blob('blue', { location: { x: 3, y: 13 }, color: 0x0000ff }),
-      new Blob('white', { location: { x: 32, y: 44 }, color: 0xffffff }),
+      new Blob('red', { location: { x: 10, y: 10 }, color: 0xff0000 }),
+      new Blob('green', { location: { x: 10, y: 20 }, color: 0x00ff00 }),
+      new Blob('blue', { location: { x: 30, y: 10 }, color: 0x0000ff }),
+      new Blob('white', { location: { x: 30, y: 20 }, color: 0xffffff }),
     ]
   }
 
