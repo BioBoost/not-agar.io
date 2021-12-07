@@ -9,6 +9,10 @@ class Player {
     this._setup_blobs();
   }
 
+  get_blob(id) {
+    return this.blobs.find(b => b.id === id);
+  }
+
   move_blob(id, dx, dy) {
     let stable = this.blobs.find(b => b.id === id);
     stable.set_location(stable.location.x+dx, stable.location.y+dy);
@@ -19,6 +23,24 @@ class Player {
     let stable = this.blobs.find(b => b.id === id);
     stable.set_location(location.x, location.y);
     this._suck_in_blobs(stable);
+  }
+
+  shoot(sourceBlob, targetPlayer, targetLocation) {
+    console.log("Checking for blobs in range of ");
+    console.log(targetLocation)
+    console.log("Radius: " + sourceBlob.radius())
+    console.log("Looking at following blobs:")
+    console.log(targetPlayer.blobs)
+    let targetBlobs = BlobHelper.blobs_within_range(targetPlayer.blobs, targetLocation, sourceBlob.radius());
+
+    console.log("Found following blobs in range:")
+    console.log(targetBlobs)
+
+    // TODO Now damage the blobs that were in range !
+    // TODO: https://mathworld.wolfram.com/Circle-CircleIntersection.html
+    targetBlobs.forEach(b => {
+      b.damage(sourceBlob.hp / 2);
+    })
   }
 
   // Stable blob sucks in other blobs around
@@ -32,10 +54,10 @@ class Player {
 
   _setup_blobs() {
     this.blobs = [
-      new Blob(1, { location: { x: 3, y: 3 }}),
-      new Blob(2, { location: { x: 15, y: 8 }}),
-      new Blob(3, { location: { x: 3, y: 13 }}),
-      new Blob(4, { location: { x: 32, y: 44 }}),
+      new Blob('red', { location: { x: 3, y: 3 }, color: 0xff0000 }),
+      new Blob('green', { location: { x: 15, y: 8 }, color: 0x00ff00 }),
+      new Blob('blue', { location: { x: 3, y: 13 }, color: 0x0000ff }),
+      new Blob('white', { location: { x: 32, y: 44 }, color: 0xffffff }),
     ]
   }
 

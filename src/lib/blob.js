@@ -1,9 +1,10 @@
 import config from '../config/config'
 
 class Blob {
-  constructor(id, { location = { x: 10, y: 10 }} = {}) {
+  constructor(id, { location = { x: 10, y: 10 }, color = 0xff0000 } = {}) {
     this.id = id;
     this.hp = 50;
+    this.color = color;
     this.location = {};
     this.set_location(location.x, location.y);
 
@@ -11,7 +12,7 @@ class Blob {
   }
 
   radius() {
-    return Math.floor(Math.sqrt(this.hp / Math.PI));
+    return Math.ceil(Math.sqrt(this.hp / Math.PI));
   }
 
   set_location(x, y) {
@@ -34,6 +35,11 @@ class Blob {
   heal(amount) {
     // What about moving blob if it becomes to big ??
     this.hp += amount;
+  }
+
+  damage(amount) {
+    if (amount > this.hp) this.kill();
+    else this.hp -= amount;
   }
 
   kill() {

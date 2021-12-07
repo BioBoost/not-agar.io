@@ -1,5 +1,4 @@
 import Phaser from 'phaser';
-import { Blob } from './lib/blob'
 import config from './config/config'
 import { Player } from './lib/player'
 
@@ -45,7 +44,7 @@ class MyGame extends Phaser.Scene {
     // We also group the blobs so we have easy access later on
     this.player1Blobs = this.add.group();
     player1.blobs.forEach(b => {
-      let circle = new Phaser.GameObjects.Arc(this, b.location.x, b.location.y, b.radius(), 0, 360, false, player1.color);
+      let circle = new Phaser.GameObjects.Arc(this, b.location.x, b.location.y, b.radius(), 0, 360, false, b.color);
         // .setScale(10)
         // 10*radius
         // 10*b.location.x
@@ -58,15 +57,44 @@ class MyGame extends Phaser.Scene {
     // We also group the blobs so we have easy access later on
     this.player2Blobs = this.add.group();
     player2.blobs.forEach(b => {
-      let circle = new Phaser.GameObjects.Arc(this, b.location.x, b.location.y, b.radius(), 0, 360, false, player2.color);
+      let circle = new Phaser.GameObjects.Arc(this, b.location.x, b.location.y, b.radius(), 0, 360, false, b.color);
       circle.setData('blob', b);
       this.player2Blobs.add(circle);
       playfield2.add(circle);     // Add to the player's field
     });
 
+    this.shot = false;
   }
 
   update() {
+    // Important Note !
+    // Players can either move or shoot. Not both in 1 turn.
+    // 1 turn = fixed number of seconds (for example 10)
+
+    // Before we start moving we need to take note of the locations that are being shot at.
+    // This because the blobs can move and we are keeping the shot locked at the original location.
+    // This means you can evade a shot.
+    // Basically a player is not actually shooting at a blob but rather at a location, but to make
+    // it more user-friendly we are shooting at the current location of a given blob.
+    //
+    // Consider the following data coming from the client
+    // shoot source: { player 1 (blob green) } target: { player 2 (blob red) }
+
+    let shootActions = [{
+      source: {
+        player: player1,
+        // This gives us the strength and start location of the shot
+        // (maybe we need this later on for animations)
+        blob: player1.get_blob('green')
+      },
+      target: {
+        player: player2,
+        // The location we are shooting at
+        // blob may move in this turn (moves are done first)
+        location: player2.get_blob('red').location
+      },
+    }];
+
     let cursors = this.input.keyboard.createCursorKeys();
 
     let dx = 0;
@@ -75,7 +103,27 @@ class MyGame extends Phaser.Scene {
     if (cursors.right.isDown) dx++;
     if (cursors.up.isDown) dy--;
     if (cursors.down.isDown) dy++;
-    if (dx !== 0 || dy !== 0) player1.move_blob(2, dx, dy);
+    if (dx !== 0 || dy !== 0) player1.move_blob('green', dx, dy);
+
+    if (!this.shot && cursors.space.isDown) {
+      console.log("Player 1 is shooting at player 2 ...");
+      // Now we should do the actual shooting based on the locations
+      // player1.shoot(player1.get_blob('green'), player2, location);
+
+      console.log(player2.get_blob('red'))
+
+      shootActions.forEach(sa => {
+        sa.source.player.shoot(
+          sa.source.blob,
+          sa.target.player,
+          sa.target.location
+        );
+      });
+      this.shot = true;
+      
+      console.log(player2.get_blob('red'))
+    }
+
 
     this._update_player_blobs(this.player1Blobs);
     this._update_player_blobs(this.player2Blobs);
