@@ -1,6 +1,7 @@
 import Phaser from 'phaser';
 import config from './config/config'
 import { Player } from './lib/player'
+import axios from 'axios'
 
 // Before we start moving we need to take note of the locations that are being shot at.
 // This because the blobs can move and we are keeping the shot locked at the original location.
@@ -89,6 +90,7 @@ class MyGame extends Phaser.Scene {
     });
 
     this.round = 1;
+    this.snapshotCounter = 0;
   }
 
   update(time) {
@@ -115,6 +117,29 @@ class MyGame extends Phaser.Scene {
 
     this._update_player_blobs(this.player1Blobs);
     this._update_player_blobs(this.player2Blobs);
+
+    // TODO - Not sure if this is best approach
+    // Schedule snapshot which we can send to the display
+    if (config.backend.enable_display && ++this.snapshotCounter == 10) {
+      console.log("Rendering on 99 bugs display")
+      this.game.renderer.snapshot((image) => {
+        // Posting to backend because CORs is being pain in the ass with hyper (rust api).
+        // Image is html img element with src set to base64 image data.
+        // We do need to strip off the part that contains 'data:image/png;base64,`
+
+        axios.post(`${config.backend.host}${config.backend.routes.display}`, {
+          data: image.src.substring(22)
+        })
+        .then(function (response) {
+          console.log(response);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      }, 'image/png');
+
+      this.updateCounter = 0
+    }
   }
 
   // Update the graphical representation of the blobs

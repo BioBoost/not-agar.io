@@ -36,6 +36,14 @@ const config = {
 
   game: {
     round_time: 10
+  },
+
+  backend: {
+    host: 'http://localhost:3000',
+    enable_display: false,
+    routes: {
+      display: '/display'
+    }
   }
 
 }
