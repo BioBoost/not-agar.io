@@ -32,6 +32,10 @@ const config = {
     X_MAX: 96/2-1,
     Y_MIN: 0,
     Y_MAX: 64/2-1,
+  },
+
+  game: {
+    round_time: 10
   }
 
 }

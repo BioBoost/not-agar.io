@@ -3,7 +3,8 @@ import { Blob } from './blob'
 
 class Player {
 
-  constructor({ color = 0xff0000, origin = { x: 0, y: 0 }} = {}) {
+  constructor(id, { color = 0xff0000, origin = { x: 0, y: 0 }} = {}) {
+    this.id = id;
     this.color = color;
     this.origin = origin;
     this._setup_blobs();
